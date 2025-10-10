@@ -3,28 +3,22 @@ package uz.itteacher.myhandybookwithcompose
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import uz.itteacher.myhandybookwithcompose.ui.theme.MyHandyBookWithComposeTheme
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.lifecycle.viewmodel.compose.viewModel
+import uz.itteacher.myhandybookwithcompose.Screens.BookViewModel
+import uz.itteacher.myhandybookwithcompose.Screens.LoginScreen
+import uz.itteacher.myhandybookwithcompose.Screens.MainScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
-            MyHandyBookWithComposeTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+            MyAppTheme {
+                AppNavigation()
             }
         }
     }
@@ -33,17 +27,23 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+fun MyAppTheme(content: @Composable () -> Unit) {
+    MaterialTheme {
+        content()
+    }
 }
 
-@Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
-    MyHandyBookWithComposeTheme {
-        Greeting("Android")
+fun AppNavigation() {
+    val navController = rememberNavController()
+    val viewModel: BookViewModel = viewModel()
+
+    NavHost(navController = navController, startDestination = "login") {
+        composable("login") {
+            LoginScreen(viewModel = viewModel, navController = navController)
+        }
+        composable("main") {
+            MainScreen(viewModel = viewModel)
+        }
     }
 }
