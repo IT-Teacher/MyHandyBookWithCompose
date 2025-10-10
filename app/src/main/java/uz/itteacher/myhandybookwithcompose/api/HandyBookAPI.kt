@@ -10,7 +10,7 @@ import uz.itteacher.myhandybookwithcompose.models.LoginRequest
 import uz.itteacher.myhandybookwithcompose.models.RegisterRequest
 import uz.itteacher.myhandybookwithcompose.models.User
 
-interface HamdyBookApi {
+interface HandyBookApi {
 
     // 1. Get All Books
     @GET("book-api")

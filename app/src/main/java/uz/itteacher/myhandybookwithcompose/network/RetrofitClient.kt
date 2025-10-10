@@ -1,29 +1,35 @@
 package uz.itteacher.myhandybookwithcompose.network
 
-import android.R.attr.level
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import uz.itteacher.myhandybookwithcompose.api.HamdyBookApi
+import uz.itteacher.myhandybookwithcompose.api.HandyBookApi
+import uz.itteacher.myhandybookwithcompose.MyApp
+import timber.log.Timber
 
 object RetrofitClient {
     private const val BASE_URL = "http://handybook.uz/"
 
-    val api: HamdyBookApi by lazy {
+    val api: HandyBookApi by lazy {
         val logging = HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
+            setLevel(HttpLoggingInterceptor.Level.BODY)
         }
 
         val client = OkHttpClient.Builder()
             .addInterceptor(logging)
             .addInterceptor { chain ->
-                val token = getAccessToken() // Implement this to retrieve the stored token
+                val token = getAccessToken()
                 val request = chain.request().newBuilder()
                     .addHeader("Authorization", "Bearer $token")
                     .build()
-                chain.proceed(request)
+                try {
+                    chain.proceed(request)
+                } catch (e: Exception) {
+                    Timber.e(e, "Network request failed for ${request.url}")
+                    throw e
+                }
             }
             .build()
 
@@ -36,11 +42,16 @@ object RetrofitClient {
             .client(client)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
-            .create(HamdyBookApi::class.java)
+            .create(HandyBookApi::class.java)
     }
 
     private fun getAccessToken(): String {
-        // Implement logic to retrieve the access token (e.g., from SharedPreferences)
-        return "your_access_token_here" // Replace with actual token retrieval
+        return try {
+            val prefs = MyApp.instance.getSharedPreferences("HandyBookPrefs", android.content.Context.MODE_PRIVATE)
+            prefs.getString("access_token", "") ?: ""
+        } catch (e: UninitializedPropertyAccessException) {
+            Timber.e(e, "MyApp.instance not initialized")
+            ""
+        }
     }
 }

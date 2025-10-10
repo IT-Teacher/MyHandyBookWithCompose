@@ -1,23 +1,38 @@
 package uz.itteacher.myhandybookwithcompose.network
 
 import android.content.Context
+import uz.itteacher.myhandybookwithcompose.MyApp
+import timber.log.Timber
 
 object TokenManager {
-    private const val PREF_NAME = "HamdyBookPrefs"
+    private const val PREF_NAME = "HandyBookPrefs"
     private const val KEY_TOKEN = "access_token"
 
-    fun saveToken(context: Context, token: String) {
-        val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-        prefs.edit().putString(KEY_TOKEN, token).apply()
+    fun saveToken(token: String) {
+        try {
+            val prefs = MyApp.instance.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+            prefs.edit().putString(KEY_TOKEN, token).apply()
+        } catch (e: UninitializedPropertyAccessException) {
+            Timber.e(e, "MyApp.instance not initialized when saving token")
+        }
     }
 
-    fun getToken(context: Context): String? {
-        val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-        return prefs.getString(KEY_TOKEN, null)
+    fun getToken(): String? {
+        return try {
+            val prefs = MyApp.instance.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+            prefs.getString(KEY_TOKEN, null)
+        } catch (e: UninitializedPropertyAccessException) {
+            Timber.e(e, "MyApp.instance not initialized when getting token")
+            null
+        }
     }
 
-    fun clearToken(context: Context) {
-        val prefs = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
-        prefs.edit().remove(KEY_TOKEN).apply()
+    fun clearToken() {
+        try {
+            val prefs = MyApp.instance.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+            prefs.edit().remove(KEY_TOKEN).apply()
+        } catch (e: UninitializedPropertyAccessException) {
+            Timber.e(e, "MyApp.instance not initialized when clearing token")
+        }
     }
 }

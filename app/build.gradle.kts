@@ -49,6 +49,8 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.navigation.runtime.ktx)
+    implementation(libs.androidx.navigation.compose)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -75,4 +77,6 @@ dependencies {
 
 // Timber for logging
     implementation("com.jakewharton.timber:timber:5.0.1")
+
+    implementation("io.coil-kt:coil-compose:2.7.0") // Replace with the latest version
 }
