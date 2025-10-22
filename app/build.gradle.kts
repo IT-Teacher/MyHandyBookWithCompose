@@ -79,4 +79,7 @@ dependencies {
     implementation("com.jakewharton.timber:timber:5.0.1")
 
     implementation("io.coil-kt:coil-compose:2.7.0") // Replace with the latest version
+
+    //navigation
+    implementation("androidx.navigation:navigation-compose:2.9.5")
 }

@@ -12,6 +12,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import uz.itteacher.myhandybookwithcompose.Screens.BookViewModel
 import uz.itteacher.myhandybookwithcompose.Screens.LoginScreen
 import uz.itteacher.myhandybookwithcompose.Screens.MainScreen
+import uz.itteacher.myhandybookwithcompose.navigation.AppNavigation
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,17 +34,3 @@ fun MyAppTheme(content: @Composable () -> Unit) {
     }
 }
 
-@Composable
-fun AppNavigation() {
-    val navController = rememberNavController()
-    val viewModel: BookViewModel = viewModel()
-
-    NavHost(navController = navController, startDestination = "login") {
-        composable("login") {
-            LoginScreen(viewModel = viewModel, navController = navController)
-        }
-        composable("main") {
-            MainScreen(viewModel = viewModel)
-        }
-    }
-}
