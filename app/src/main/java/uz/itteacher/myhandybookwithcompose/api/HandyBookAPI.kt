@@ -13,7 +13,7 @@ import uz.itteacher.myhandybookwithcompose.models.User
 interface HandyBookApi {
 
     // 1. Get All Books
-    @GET("book-api")
+    @GET("book-api/")
     suspend fun getAllBooks(): List<Book>
 
     // 2. Get Single Book
