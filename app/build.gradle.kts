@@ -8,6 +8,15 @@ android {
     namespace = "uz.itteacher.myhandybookwithcompose"
     compileSdk = 36
 
+    packagingOptions {
+        resources {
+            pickFirsts += arrayOf(
+                "META-INF/androidx.core_core.version",
+                "META-INF/androidx.versionedparcelable_versionedparcelable.version"
+            )
+        }
+    }
+
     defaultConfig {
         applicationId = "uz.itteacher.myhandybookwithcompose"
         minSdk = 31
@@ -37,6 +46,9 @@ android {
     buildFeatures {
         compose = true
     }
+}
+configurations.all {
+    exclude("com.android.support")
 }
 
 dependencies {
@@ -80,6 +92,12 @@ dependencies {
 
     implementation("io.coil-kt:coil-compose:2.7.0") // Replace with the latest version
 
-    //navigation
+        //navigation
     implementation("androidx.navigation:navigation-compose:2.9.5")
+
+
+    implementation("com.github.mhiew:android-pdf-viewer:3.2.0-beta.2"){
+        exclude("com.github.barteksc",  "android-pdf-viewer")
+
+    }
 }
