@@ -12,15 +12,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import uz.itteacher.myhandybookwithcompose.Screens.BookViewModel
 import uz.itteacher.myhandybookwithcompose.Screens.LoginScreen
 import uz.itteacher.myhandybookwithcompose.Screens.MainScreen
+import uz.itteacher.myhandybookwithcompose.Screens.ReviewScreen
 import uz.itteacher.myhandybookwithcompose.navigation.AppNavigation
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MyAppTheme {
-                AppNavigation()
-            }
+            ReviewScreen()
         }
     }
 }
