@@ -6,7 +6,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import uz.itteacher.myhandybookwithcompose.Screens.BookViewModel
-import uz.itteacher.myhandybookwithcompose.Screens.LoginScreen
+import uz.itteacher.myhandybookwithcompose.Screens.Auth.LoginScreen
+import uz.itteacher.myhandybookwithcompose.Screens.Auth.RegisterScreen
 import uz.itteacher.myhandybookwithcompose.Screens.MainScreen
 import uz.itteacher.myhandybookwithcompose.Screens.Profile.OldBooksScreen
 import uz.itteacher.myhandybookwithcompose.Screens.Profile.ProfileScreen
@@ -20,17 +21,17 @@ fun AppNavigation() {
     val navController = rememberNavController()
     val viewModel: BookViewModel = viewModel()
 
-    NavHost(navController = navController, startDestination = "profile") {
-        composable("login") {
-            LoginScreen(viewModel = viewModel, navController = navController)
-        }
+    NavHost(navController = navController, startDestination = "login") {
         composable("main") {
             MainScreen(viewModel = viewModel)
         }
 
-//        Profile Section
 
-// AppNavHost.kt — update routes
+//        Auth Section
+        composable("login") { LoginScreen(viewModel = viewModel, navController = navController) }
+        composable("register") { RegisterScreen(viewModel = viewModel, navController = navController) }
+
+//        Profile Section
         composable("profile") { ProfileScreen(navController, api) }
         composable("settings") { SettingsScreen(navController) }
         composable("reading") { ReadingBooksScreen(navController, api) }

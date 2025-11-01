@@ -7,6 +7,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import uz.itteacher.myhandybookwithcompose.models.Book
 import uz.itteacher.myhandybookwithcompose.models.LoginRequest
+import uz.itteacher.myhandybookwithcompose.models.RegisterRequest
 import uz.itteacher.myhandybookwithcompose.network.RetrofitClient
 import uz.itteacher.myhandybookwithcompose.network.TokenManager
 
@@ -47,6 +48,23 @@ class BookViewModel : ViewModel() {
             } catch (e: Exception) {
                 Timber.e(e, "HandyBook login failed")
                 errorMessage.value = "Login failed: ${e.message}"
+            } finally {
+                isLoading.value = false
+            }
+        }
+    }
+
+    fun register(request: RegisterRequest) {
+        viewModelScope.launch {
+            isLoading.value = true
+            errorMessage.value = null
+            try {
+                val user = RetrofitClient.api.register(request)
+                TokenManager.saveToken(user.access_token)
+                isLoggedIn.value = true
+            } catch (e: Exception) {
+                Timber.e(e, "Registration failed")
+                errorMessage.value = "Ro‘yxatdan o‘tishda xato: ${e.message}"
             } finally {
                 isLoading.value = false
             }
