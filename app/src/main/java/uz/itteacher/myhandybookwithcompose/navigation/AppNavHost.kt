@@ -9,35 +9,39 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import uz.itteacher.myhandybookwithcompose.Screens.BookViewModel
-import uz.itteacher.myhandybookwithcompose.Screens.LoginScreen
-import uz.itteacher.myhandybookwithcompose.Screens.MainScreen
-import uz.itteacher.myhandybookwithcompose.Screens.OpenBook.OpenBookScreen
-import uz.itteacher.myhandybookwithcompose.Screens.OpenBook.PdfReaderScreen
-import uz.itteacher.myhandybookwithcompose.Screens.Profile.OldBooksScreen
-import uz.itteacher.myhandybookwithcompose.Screens.Profile.ProfileScreen
-import uz.itteacher.myhandybookwithcompose.Screens.Profile.ReadingBooksScreen
-import uz.itteacher.myhandybookwithcompose.Screens.Profile.SavedBooksScreen
-import uz.itteacher.myhandybookwithcompose.Screens.Profile.SettingsScreen
 import uz.itteacher.myhandybookwithcompose.network.RetrofitClient.api
+import uz.itteacher.myhandybookwithcompose.screens.ViewModel
+import uz.itteacher.myhandybookwithcompose.screens.auth.LoginScreen
+import uz.itteacher.myhandybookwithcompose.screens.auth.RegisterScreen
+import uz.itteacher.myhandybookwithcompose.screens.main.CategoryPage
+import uz.itteacher.myhandybookwithcompose.screens.main.MainScreen
+import uz.itteacher.myhandybookwithcompose.screens.openBook.OpenBookScreen
+import uz.itteacher.myhandybookwithcompose.screens.openBook.PdfReaderScreen
 import uz.itteacher.myhandybookwithcompose.screens.openbook.PdfViewModel
+import uz.itteacher.myhandybookwithcompose.screens.profile.OldBooksScreen
+import uz.itteacher.myhandybookwithcompose.screens.profile.ProfileScreen
+import uz.itteacher.myhandybookwithcompose.screens.profile.ReadingBooksScreen
+import uz.itteacher.myhandybookwithcompose.screens.profile.SavedBooksScreen
+import uz.itteacher.myhandybookwithcompose.screens.profile.SettingsScreen
 
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
-    val viewModel: BookViewModel = viewModel()
+    val viewModel: ViewModel = viewModel()
 
     NavHost(navController = navController, startDestination = "open_book") {
-        composable("login") {
-            LoginScreen(viewModel = viewModel, navController = navController)
-        }
+
         composable("main") {
-            MainScreen(viewModel = viewModel)
+            MainScreen(viewModel = viewModel, navController = navController)
         }
 
+        composable("categoryPage/{cat}") { backStackEntry ->
+            val cat = backStackEntry.arguments?.getString("cat")
+            CategoryPage(viewModel, cat, navController)
+        }
 
         composable("open_book") {
-            val vm: PdfViewModel = viewModel() // Create once
+            val vm = viewModel<PdfViewModel>()
             OpenBookScreen(vm) { url ->
                 navController.navigate("pdf_viewer?url=$url")
             }
@@ -47,19 +51,21 @@ fun AppNavigation() {
             "pdf_viewer?url={url}",
             arguments = listOf(navArgument("url") { type = NavType.StringType })
         ) { backStackEntry ->
-            // ✅ Reuse the SAME ViewModel
             val parentEntry = remember(backStackEntry) {
                 navController.getBackStackEntry("open_book")
             }
             val vm: PdfViewModel = viewModel(parentEntry)
             val url = backStackEntry.arguments?.getString("url")!!
-            PdfReaderScreen(vm, pdfUrl = url) { Log.e("PdfError", it) }
+            PdfReaderScreen(vm, pdfUrl = url) { error ->
+                Log.e("PdfError", error)
+            }
         }
 
+        // Auth
+        composable("login") { LoginScreen(viewModel = viewModel, navController = navController) }
+        composable("register") { RegisterScreen(viewModel = viewModel, navController = navController) }
 
-//        Profile Section
-
-// AppNavHost.kt — update routes
+        // Profile
         composable("profile") { ProfileScreen(navController, api) }
         composable("settings") { SettingsScreen(navController) }
         composable("reading") { ReadingBooksScreen(navController, api) }

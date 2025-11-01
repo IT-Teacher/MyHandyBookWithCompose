@@ -1,4 +1,4 @@
-package uz.itteacher.myhandybookwithcompose.Screens.Profile
+package uz.itteacher.myhandybookwithcompose.screens.profile
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

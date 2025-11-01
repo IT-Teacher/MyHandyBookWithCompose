@@ -100,4 +100,6 @@ dependencies {
         exclude("com.github.barteksc",  "android-pdf-viewer")
 
     }
+
+    implementation("androidx.compose.material:material-icons-extended:1.7.8")
 }
