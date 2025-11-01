@@ -7,7 +7,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import uz.itteacher.myhandybookwithcompose.Screens.BookViewModel
 import uz.itteacher.myhandybookwithcompose.Screens.LoginScreen
-import uz.itteacher.myhandybookwithcompose.Screens.MainScreen
+import uz.itteacher.myhandybookwithcompose.Screens.Main.CategoryPage
+import uz.itteacher.myhandybookwithcompose.Screens.Main.MainScreen
 import uz.itteacher.myhandybookwithcompose.Screens.Profile.OldBooksScreen
 import uz.itteacher.myhandybookwithcompose.Screens.Profile.ProfileScreen
 import uz.itteacher.myhandybookwithcompose.Screens.Profile.ReadingBooksScreen
@@ -20,12 +21,16 @@ fun AppNavigation() {
     val navController = rememberNavController()
     val viewModel: BookViewModel = viewModel()
 
-    NavHost(navController = navController, startDestination = "profile") {
+    NavHost(navController = navController, startDestination = "main") {
         composable("login") {
             LoginScreen(viewModel = viewModel, navController = navController)
         }
         composable("main") {
-            MainScreen(viewModel = viewModel)
+            MainScreen(viewModel = viewModel, navController = navController)
+        }
+        composable("categoryPage/{cat}") { backStack ->
+            val cat = backStack.arguments?.getString("cat")
+            CategoryPage(viewModel, cat, navController)
         }
 
 //        Profile Section
@@ -36,5 +41,6 @@ fun AppNavigation() {
         composable("reading") { ReadingBooksScreen(navController, api) }
         composable("read") { OldBooksScreen(navController, api) }
         composable("saved") { SavedBooksScreen(navController, api) }
+
     }
 }
