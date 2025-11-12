@@ -88,7 +88,7 @@ fun MainScreen(viewModel: ViewModel, navController: NavController) {
                         onSearch = {
                             viewModel.searchBooksByName(search)
                             navController.navigate("categoryPage/search")
-                        }
+                        },
                     )
                 }
                 item {
@@ -175,7 +175,7 @@ fun SearchBar(query: String, onQueryChange: (String) -> Unit, onSearch: (String)
     TextField(
         value = query,
         onValueChange = onQueryChange,
-        modifier = Modifier.fillMaxWidth().padding(19.dp).height(52.dp),
+        modifier = Modifier.fillMaxWidth().padding(19.dp).height(52.dp).clickable(onClick = {}),
         placeholder = { Text("Kitob yoki muallifni qidiring...", color = Color.Gray.copy(0.8f)) },
         leadingIcon = { Icon(Icons.Default.Search, null, tint = Color.Gray.copy(0.7f)) },
         trailingIcon = {
@@ -246,7 +246,7 @@ fun BottomNavBar(navController: NavController) {
         NavigationBarItem(selected = selectedIndex == 0, onClick = { selectedIndex = 0 }, icon = {
             Icon(painterResource(R.drawable.home), null, modifier = Modifier.size(25.dp), tint = if (selectedIndex == 0) Color(0xFF001A72) else Color(0xFFBFC1C8))
         })
-        NavigationBarItem(selected = selectedIndex == 1, onClick = { selectedIndex = 1 }, icon = {
+        NavigationBarItem(selected = selectedIndex == 1, onClick = { navController.navigate("search") }, icon = {
             Icon(painterResource(R.drawable.loop), null, modifier = Modifier.size(25.dp), tint = if (selectedIndex == 1) Color(0xFF001A72) else Color(0xFFBFC1C8))
         })
         NavigationBarItem(selected = selectedIndex == 2, onClick = { selectedIndex = 2 }, icon = {

@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import uz.ictschool.search.screens.SearchScreen
 import uz.itteacher.myhandybookwithcompose.network.RetrofitClient.api
 import uz.itteacher.myhandybookwithcompose.screens.InfoScreen
 import uz.itteacher.myhandybookwithcompose.screens.ViewModel
@@ -37,7 +38,8 @@ fun AppNavigation() {
         }
 
         composable("infoScreen") {
-            InfoScreen(navController = navController, viewModel = viewModel)
+            val vm = viewModel<PdfViewModel>()
+            InfoScreen(navController = navController, viewModel = viewModel, pdfViewModel = vm)
         }
 
 
@@ -74,6 +76,7 @@ fun AppNavigation() {
         // Auth
         composable("login") { LoginScreen(viewModel = viewModel, navController = navController) }
         composable("register") { RegisterScreen(viewModel = viewModel, navController = navController) }
+        composable("search") { SearchScreen(viewModel = viewModel, navController = navController) }
 
 
 
