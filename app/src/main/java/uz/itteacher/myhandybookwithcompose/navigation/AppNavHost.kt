@@ -1,5 +1,6 @@
 package uz.itteacher.myhandybookwithcompose.navigation
 
+import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -61,15 +62,13 @@ fun AppNavigation() {
             "pdf_viewer?url={url}",
             arguments = listOf(navArgument("url") { type = NavType.StringType })
         ) { backStackEntry ->
-            val parentEntry = remember(backStackEntry) {
-                navController.getBackStackEntry("open_book")
-            }
-            val vm: PdfViewModel = viewModel(parentEntry)
-            val url = backStackEntry.arguments?.getString("url")!!
+            val vm: PdfViewModel = viewModel()
+            val url = Uri.decode(backStackEntry.arguments?.getString("url")!!)
             PdfReaderScreen(vm, pdfUrl = url) { error ->
                 Log.e("PdfError", error)
             }
         }
+
 
 
 

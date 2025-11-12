@@ -1,5 +1,6 @@
 package uz.itteacher.myhandybookwithcompose.screens
 
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -75,7 +76,10 @@ fun InfoScreen(navController: NavHostController, viewModel: ViewModel, pdfViewMo
                 if (bookType == "E-Book") {
                     Card(
                         modifier = Modifier.fillMaxWidth(0.9f),
-                        onClick = { /* TODO: Open PDF */ },
+                        onClick = {
+                            val encodedUrl = Uri.encode(currentBook.file)
+                            navController.navigate("pdf_viewer?url=$encodedUrl")
+                        },
                         shape = RoundedCornerShape(0.dp)
                     ) {
                         Row(Modifier.fillMaxWidth()) {
