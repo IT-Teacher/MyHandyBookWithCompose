@@ -41,7 +41,6 @@ import kotlin.text.isNotEmpty
 import kotlin.text.isNullOrBlank
 import kotlin.text.trim
 
-// UI model
 data class MediaItem(
     val id: String,
     val title: String,
@@ -49,6 +48,7 @@ data class MediaItem(
     val price: String,
     val rating: String,
     val thumbnailUrl: String?
+
 )
 
 @Composable
