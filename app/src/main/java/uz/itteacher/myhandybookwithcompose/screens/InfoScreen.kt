@@ -1,5 +1,6 @@
 package uz.itteacher.myhandybookwithcompose.screens
 
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -29,18 +30,18 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import uz.itteacher.myhandybookwithcompose.R
-import uz.itteacher.myhandybookwithcompose.screens.ViewModel
-import uz.itteacher.myhandybookwithcompose.models.Book
+import uz.itteacher.myhandybookwithcompose.screens.openBook.PdfViewModel
 import kotlin.math.min
 
 @Composable
-fun InfoScreen(navController: NavHostController, viewModel: ViewModel) {
+fun InfoScreen(navController: NavHostController, viewModel: ViewModel, pdfViewModel: PdfViewModel) {
     val currentBook = viewModel.selectedBook ?: run {
         Box(Modifier.fillMaxSize(), Alignment.Center) {
             Text("Kitob topilmadi", color = Color.Red)
         }
         return
     }
+    val readingProgress by pdfViewModel.readingProgress.collectAsState()
 
     var bookType by remember { mutableStateOf("E-Book") }
     var bookInfo by remember { mutableStateOf("Tavsif") }
@@ -75,7 +76,10 @@ fun InfoScreen(navController: NavHostController, viewModel: ViewModel) {
                 if (bookType == "E-Book") {
                     Card(
                         modifier = Modifier.fillMaxWidth(0.9f),
-                        onClick = { /* TODO: Open PDF */ },
+                        onClick = {
+                            val encodedUrl = Uri.encode(currentBook.file)
+                            navController.navigate("pdf_viewer?url=$encodedUrl")
+                        },
                         shape = RoundedCornerShape(0.dp)
                     ) {
                         Row(Modifier.fillMaxWidth()) {
@@ -97,7 +101,7 @@ fun InfoScreen(navController: NavHostController, viewModel: ViewModel) {
                                 horizontalArrangement = Arrangement.Center,
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Text("87%", color = Color(0xFF0F1D4C), fontSize = 18.sp)
+                                Text("${(readingProgress*100).toInt()}%", color = Color(0xFF0F1D4C), fontSize = 18.sp)
                             }
                         }
                     }

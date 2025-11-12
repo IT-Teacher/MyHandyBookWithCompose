@@ -1,5 +1,6 @@
 package uz.itteacher.myhandybookwithcompose.navigation
 
+import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -9,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import uz.ictschool.search.screens.SearchScreen
 import uz.itteacher.myhandybookwithcompose.network.RetrofitClient.api
 import uz.itteacher.myhandybookwithcompose.screens.InfoScreen
 import uz.itteacher.myhandybookwithcompose.screens.ViewModel
@@ -37,7 +39,8 @@ fun AppNavigation() {
         }
 
         composable("infoScreen") {
-            InfoScreen(navController = navController, viewModel = viewModel)
+            val vm = viewModel<PdfViewModel>()
+            InfoScreen(navController = navController, viewModel = viewModel, pdfViewModel = vm)
         }
 
 
@@ -59,11 +62,8 @@ fun AppNavigation() {
             "pdf_viewer?url={url}",
             arguments = listOf(navArgument("url") { type = NavType.StringType })
         ) { backStackEntry ->
-            val parentEntry = remember(backStackEntry) {
-                navController.getBackStackEntry("open_book")
-            }
-            val vm: PdfViewModel = viewModel(parentEntry)
-            val url = backStackEntry.arguments?.getString("url")!!
+            val vm: PdfViewModel = viewModel()
+            val url = Uri.decode(backStackEntry.arguments?.getString("url")!!)
             PdfReaderScreen(vm, pdfUrl = url) { error ->
                 Log.e("PdfError", error)
             }
@@ -71,9 +71,11 @@ fun AppNavigation() {
 
 
 
+
         // Auth
         composable("login") { LoginScreen(viewModel = viewModel, navController = navController) }
         composable("register") { RegisterScreen(viewModel = viewModel, navController = navController) }
+        composable("search") { SearchScreen(viewModel = viewModel, navController = navController) }
 
 
 
