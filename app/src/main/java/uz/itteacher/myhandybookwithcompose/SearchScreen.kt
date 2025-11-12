@@ -41,6 +41,7 @@ import kotlin.text.isNotEmpty
 import kotlin.text.isNullOrBlank
 import kotlin.text.trim
 
+// UI model
 data class MediaItem(
     val id: String,
     val title: String,
